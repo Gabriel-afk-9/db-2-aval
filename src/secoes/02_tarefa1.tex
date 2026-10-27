@@ -1,0 +1,205 @@
+\section{Tarefa 1 --- Modelagem com MER/DER}
+
+\subsection{Entidades e atributos}
+
+A Tabela~\ref{tab:entidades} apresenta as entidades do modelo, seus atributos e a chave primária. As chaves estrangeiras estão indicadas por ``(FK)'' e o atributo derivado por ``(derivado)''. Para manter o DER legível, os atributos são detalhados na tabela e não repetidos na visão geral da Figura~\ref{fig:der}.
+
+{\footnotesize
+\begin{longtable}{@{}L{3.5cm}L{9.4cm}L{1.9cm}@{}}
+\caption{Entidades, atributos e chaves}
+\label{tab:entidades}\\
+\toprule
+\textbf{Entidade} & \textbf{Atributos} & \textbf{Chave primária}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Entidade} & \textbf{Atributos} & \textbf{Chave primária}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\texttt{Cliente} &
+\texttt{cpf}; \texttt{nome\_completo}; \texttt{telefone}; \texttt{email}; \texttt{endereco} (logradouro, número, complemento, bairro, cidade, UF, CEP). &
+\texttt{cpf}\\
+
+\texttt{Coleta} &
+\texttt{codigo\_coleta}; \texttt{data\_coleta}; \texttt{data\_entrega\_coleta}; \texttt{cpf\_remetente} (FK); \texttt{cpf\_destinatario} (FK); \texttt{nome\_remetente}; \texttt{endereco\_coleta}; \texttt{telefone\_remetente}; \texttt{nome\_destinatario}; \texttt{endereco\_entrega}; \texttt{telefone\_destinatario}; \texttt{codigo\_deposito\_origem} (FK); \texttt{codigo\_cidade\_destino} (FK). &
+\texttt{codigo\_coleta}\\
+
+\texttt{Encomenda} &
+\texttt{codigo\_encomenda}; \texttt{codigo\_coleta} (FK); \texttt{descricao}; \texttt{valor}; \texttt{peso\_kg}; \texttt{volume\_m3}; \texttt{tipo\_encomenda} (discriminador). &
+\texttt{codigo\_encomenda}\\
+
+\texttt{Encomenda\allowbreak Comum} &
+\texttt{codigo\_encomenda} (PK/FK). Sem atributos específicos. &
+\texttt{codigo\_encomenda}\\
+
+\texttt{Encomenda\allowbreak Fragil} &
+\texttt{codigo\_encomenda} (PK/FK); \texttt{cuidados\_especiais}; \texttt{empilhamento\_maximo}; \texttt{manter\_em\_pe}. &
+\texttt{codigo\_encomenda}\\
+
+\texttt{Encomenda\allowbreak Perecivel} &
+\texttt{codigo\_encomenda} (PK/FK); \texttt{temperatura\_min\_c}; \texttt{temperatura\_max\_c}; \texttt{validade}. &
+\texttt{codigo\_encomenda}\\
+
+\texttt{Encomenda\allowbreak Perigosa} &
+\texttt{codigo\_encomenda} (PK/FK); \texttt{numero\_onu}; \texttt{classe\_risco}; \texttt{grupo\_embalagem}. &
+\texttt{codigo\_encomenda}\\
+
+\texttt{NotaFiscal} &
+\texttt{numero\_nota}; \texttt{codigo\_encomenda} (FK, único); \texttt{codigo\_fatura} (FK); \texttt{data\_emissao}; \texttt{valor\_total}; \texttt{percentual\_frete}; \texttt{valor\_frete} (derivado); \texttt{data\_entrega\_destinatario}. &
+\texttt{numero\_nota}\\
+
+\texttt{Fatura} &
+\texttt{numero\_fatura}; \texttt{cpf\_pagador} (FK); \texttt{data\_emissao}; \texttt{data\_vencimento}; \texttt{valor\_frete\_total} (derivado). &
+\texttt{numero\_fatura}\\
+
+\texttt{Caminhao} &
+\texttt{placa}; \texttt{modelo}; \texttt{capacidade\_kg}; \texttt{capacidade\_m3}. &
+\texttt{placa}\\
+
+\texttt{Cidade} &
+\texttt{codigo\_cidade}; \texttt{nome}; \texttt{uf}; \texttt{codigo\_regiao} (FK). &
+\texttt{codigo\_cidade}\\
+
+\texttt{Regiao} &
+\texttt{codigo\_regiao}; \texttt{nome}. &
+\texttt{codigo\_regiao}\\
+
+\texttt{Deposito} &
+\texttt{codigo\_deposito}; \texttt{nome}; \texttt{endereco}; \texttt{codigo\_cidade} (FK, único). &
+\texttt{codigo\_deposito}\\
+
+\texttt{Embarque} &
+\texttt{codigo\_embarque}; \texttt{numero\_nota} (FK); \texttt{placa} (FK); \texttt{codigo\_cidade\_destino} (FK); \texttt{ordem\_trecho}; \texttt{data\_hora\_embarque}; \texttt{data\_hora\_desembarque}. &
+\texttt{codigo\_embarque}\\
+
+\texttt{Ocorrencia} &
+\texttt{codigo\_ocorrencia}; \texttt{codigo\_embarque} (FK); \texttt{tipo}; \texttt{data\_hora}; \texttt{descricao}; \texttt{status}. &
+\texttt{codigo\_ocorrencia}\\
+\end{longtable}
+}
+
+\noindent\footnotesize Os campos \texttt{nome\_remetente}, \texttt{endereco\_coleta}, \texttt{telefone\_remetente}, \texttt{nome\_destinatario}, \texttt{endereco\_entrega} e \texttt{telefone\_destinatario} são cópias históricas dos dados do cliente no momento da coleta, exigidas pelo documento de coleta. \normalsize
+
+\subsection{Relacionamentos e cardinalidades}
+
+A Tabela~\ref{tab:relacionamentos} resume os relacionamentos, as cardinalidades e a participação. A notação $(m,n)$ indica o mínimo e o máximo de ocorrências de uma entidade associadas a uma ocorrência da outra.
+
+{\small
+\begin{longtable}{@{}L{3.0cm}L{3.0cm}L{2.7cm}L{6.2cm}@{}}
+\caption{Relacionamentos, cardinalidades e participação}
+\label{tab:relacionamentos}\\
+\toprule
+\textbf{Relacionamento} & \textbf{Entidades} & \textbf{Cardinalidade} & \textbf{Regra de negócio (participação)}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Relacionamento} & \textbf{Entidades} & \textbf{Cardinalidade} & \textbf{Regra de negócio (participação)}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\texttt{ENVIA} & Cliente--Coleta & 1:N & Total em Coleta: um cliente pode ser remetente de várias coletas; cada coleta tem um remetente.\\
+
+\texttt{RECEBE} & Cliente--Coleta & 1:N & Total em Coleta: um cliente pode ser destinatário de várias coletas; cada coleta tem um destinatário.\\
+
+\texttt{CONTEM} & Coleta--Encomenda & 1:N & Total em Encomenda: uma coleta contém uma ou mais encomendas; cada encomenda pertence a uma coleta.\\
+
+\texttt{GERA} & Encomenda--NotaFiscal & 1:1 & Total nos dois lados: cada encomenda gera uma nota; cada nota se refere a uma encomenda.\\
+
+\texttt{COBRA} & NotaFiscal--Fatura & N:1 & Total em NotaFiscal: uma fatura agrupa várias notas; cada nota pertence a uma fatura.\\
+
+\texttt{PAGA} & Cliente--Fatura & 1:N & Total em Fatura: o pagador é o remetente ou o destinatário; um cliente pode pagar várias faturas.\\
+
+\texttt{ORIGINA} & Deposito--Coleta & 1:N & Total em Coleta: cada coleta é entregue a um depósito; um depósito recebe várias coletas.\\
+
+\texttt{ENTREGA\_EM} & Coleta--Cidade & N:1 & Total em Coleta: cada coleta tem uma cidade de destino; uma cidade recebe várias coletas.\\
+
+\texttt{SEDIA} & Deposito--Cidade & 1:1 & Total em Deposito e parcial em Cidade: no máximo um depósito por cidade; todo depósito fica em uma cidade.\\
+
+\texttt{AGRUPIA} & Cidade--Regiao & N:1 & Total em Cidade: cada cidade pertence a uma região; uma região agrupa várias cidades.\\
+
+\texttt{ATENDE} & Caminhao--Cidade & N:N & Parcial nos dois lados: um caminhão atende várias cidades; uma cidade é atendida por vários caminhões.\\
+
+\texttt{EMBARCA} & NotaFiscal--Caminhao & N:N & Parcial nos dois lados: uma nota pode ter vários embarques; um caminhão pode realizar vários embarques.\\
+
+\texttt{DESTINO\_TRECHO} & Embarque--Cidade & N:1 & Total em Embarque: cada trecho tem uma cidade de destino.\\
+
+\texttt{REGISTRA} & Embarque--Ocorrencia & 1:N & Total em Ocorrencia: um embarque pode ter várias ocorrências; cada ocorrência pertence a um embarque.\\
+\end{longtable}
+}
+
+\subsection{Diagramas}
+
+A Figura~\ref{fig:der} apresenta a visão geral do DER. Para evitar poluição visual, os atributos foram omitidos dessa figura; eles estão na Tabela~\ref{tab:entidades} e nos detalhes das Figuras~\ref{fig:hierarquia} e~\ref{fig:agregacao}. Todas as entidades, relacionamentos e cardinalidades do modelo estão representados.
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{\input{diagramas/der_geral}}
+\caption{Visão geral do DER do Sistema de Transportadora}
+\label{fig:der}
+\end{figure}
+
+A Figura~\ref{fig:hierarquia} detalha o requisito adicional RA1. A especialização é representada pelo círculo com a letra ``d'', que indica especialização disjunta; a linha dupla entre o supertipo e o círculo indica participação total. A Figura~\ref{fig:agregacao} detalha o requisito adicional RA2: o losango \texttt{EMBARCA} é envolvido pela caixa tracejada (agregação) e materializado pela entidade \texttt{Embarque}, que por sua vez se relaciona com \texttt{Ocorrencia}.
+
+\begin{figure}[H]
+\centering
+\resizebox{0.82\linewidth}{!}{\input{diagramas/hierarquia}}
+\caption{Hierarquia de especialização de \texttt{Encomenda} (RA1)}
+\label{fig:hierarquia}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\resizebox{0.78\linewidth}{!}{\input{diagramas/agregacao}}
+\caption{Agregação \texttt{EMBARCA} e entidades \texttt{Embarque} e \texttt{Ocorrencia} (RA2)}
+\label{fig:agregacao}
+\end{figure}
+
+\subsection{Como os requisitos da Seção 3 foram modelados}
+
+A Tabela~\ref{tab:requisitos_mer} relaciona cada item do enunciado à decisão de modelagem correspondente. Os requisitos adicionais RA1 e RA2 estão descritos na Seção~\ref{sec:adicionais} e representados nas Figuras~\ref{fig:hierarquia} e~\ref{fig:agregacao}.
+
+{\small
+\begin{longtable}{@{}L{1.0cm}L{4.6cm}L{9.4cm}@{}}
+\caption{Correspondência entre os requisitos da Seção 3 e o MER}
+\label{tab:requisitos_mer}\\
+\toprule
+\textbf{Item} & \textbf{Requisito} & \textbf{Como foi modelado no MER}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Item} & \textbf{Requisito} & \textbf{Como foi modelado no MER}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+R01 & O cliente contata a transportadora e é registrada uma coleta no endereço indicado. & Entidade \texttt{Coleta}, com \texttt{data\_coleta} e \texttt{endereco\_coleta}, relacionada ao cliente remetente por \texttt{ENVIA}.\\
+
+R02 & O cliente é o remetente e o destinatário também é um cliente. & Dois relacionamentos 1:N entre \texttt{Cliente} e \texttt{Coleta}: \texttt{ENVIA} (remetente) e \texttt{RECEBE} (destinatário).\\
+
+R03 & Guardar nome completo, CPF, telefone, e-mail e endereço completo do remetente e do destinatário. & Atributos em \texttt{Cliente}, com \texttt{cpf} como chave primária. O endereço é um atributo composto.\\
+
+R04 & O documento de coleta registra CPF, nome, endereço e telefone de remetente e destinatário. & \texttt{Coleta} guarda as FKs \texttt{cpf\_remetente} e \texttt{cpf\_destinatario} e cópias históricas de nome, endereço e telefone de ambos.\\
+
+R05 & Dados da mercadoria: descrição, valor, peso e volume em metros cúbicos. & Entidade \texttt{Encomenda}, com \texttt{descricao}, \texttt{valor}, \texttt{peso\_kg} e \texttt{volume\_m3}, em relacionamento 1:N com \texttt{Coleta} (\texttt{CONTEM}).\\
+
+R06 & Emitir nota fiscal com os dados do remetente e do destinatário, buscando os dados da coleta, inclusive a mercadoria. & \texttt{NotaFiscal} em 1:1 com \texttt{Encomenda} (\texttt{GERA}); os dados de remetente e destinatário são obtidos pelo caminho \texttt{NotaFiscal}$\rightarrow$\texttt{Encomenda}$\rightarrow$\texttt{Coleta}$\rightarrow$\texttt{Cliente}, sem duplicação no MER.\\
+
+R07 & Os caminhões que fazem coletas em uma cidade chegam ao depósito; há um depósito por cidade; as mercadorias são agrupadas por cidade ou região de destino. & \texttt{Deposito} em 1:1 com \texttt{Cidade} (\texttt{SEDIA}); \texttt{Coleta} se relaciona com \texttt{Deposito} (\texttt{ORIGINA}) e com a cidade de destino (\texttt{ENTREGA\_EM}); \texttt{Cidade} se relaciona com \texttt{Regiao} (\texttt{AGRUPIA}).\\
+
+R08 & Para cada mercadoria é gerada uma nota fiscal. & Relacionamento 1:1 \texttt{GERA}, com participação total nos dois lados.\\
+
+R09 & A coleta tem uma data de entrega. & Atributo \texttt{data\_entrega\_coleta} em \texttt{Coleta} (entrega ao depósito, conforme a premissa P9).\\
+
+R10 & As mercadorias são carregadas em caminhões; cada caminhão vai para uma ou muitas cidades; mais de um caminhão pode ir para a mesma cidade. & Relacionamento N:N \texttt{ATENDE} entre \texttt{Caminhao} e \texttt{Cidade}; o transporte efetivo é registrado por \texttt{EMBARCA}, entre \texttt{NotaFiscal} e \texttt{Caminhao}, materializado por \texttt{Embarque}.\\
+
+R11 & Calcular o valor do frete, normalmente 5\% do valor total da nota; a nota tem data de entrega ao destinatário. & Atributos \texttt{valor\_total}, \texttt{percentual\_frete}, \texttt{valor\_frete} (derivado) e \texttt{data\_entrega\_destinatario} em \texttt{NotaFiscal}.\\
+
+R12 & A nota não é paga pelo cliente; ao gerar a nota é gerada uma fatura do frete, com número, datas de emissão e vencimento, valor e nome do pagador; a fatura pode envolver várias notas. & \texttt{Fatura} em 1:N com \texttt{NotaFiscal} (\texttt{COBRA}); \texttt{Cliente} se relaciona com \texttt{Fatura} no papel de pagador (\texttt{PAGA}); \texttt{valor\_frete\_total} é derivado das notas.\\
+\end{longtable}
+}

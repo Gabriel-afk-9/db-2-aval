@@ -1,0 +1,47 @@
+% ============================================================
+% Grupo 6 - Transportadora
+% Segunda Avaliacao Semestral - Topicos em Banco de Dados
+% ============================================================
+\section{Requisitos e decisões de modelagem}
+
+Este documento modela o banco de dados de uma transportadora a partir dos requisitos da Seção~3 do enunciado. Foi elaborado por Felipe Martins, Vitor Santos, Francisco Osmar e Gabriel Lima (Grupo~6). A Tarefa~1 apresenta o modelo entidade-relacionamento (MER) e o diagrama entidade-relacionamento (DER); a Tarefa~2 mapeia esse modelo para o modelo NoSQL de documentos. A Seção~\ref{sec:premissas} registra as premissas adotadas para os pontos que o enunciado deixa em aberto, e a Seção~\ref{sec:adicionais} descreve os dois requisitos adicionais criados pelo grupo.
+
+\subsection{Cenário}
+
+O processo começa quando um cliente (remetente) contrata a transportadora e informa o endereço da coleta. A transportadora registra a coleta com os dados do remetente, do destinatário (que também é cliente) e da mercadoria. As mercadorias são levadas ao depósito da cidade, separadas por cidade ou região de destino e carregadas em caminhões. Para cada mercadoria é emitida uma nota fiscal, e o valor do frete é cobrado por meio de uma fatura. O modelo descrito a seguir cobre esse fluxo e inclui os requisitos adicionais RA1 e RA2.
+
+\subsection{Requisitos adicionais}
+\label{sec:adicionais}
+
+O enunciado exige dois requisitos adicionais que provoquem uma nova entidade, relação, agregação ou hierarquia. Foram definidos os seguintes.
+
+\paragraph{RA1 --- Hierarquia de tipos de encomenda.}
+A transportadora precisa tratar quatro tipos de encomenda, cada um com informações e regras próprias:
+\begin{itemize}
+  \item \textbf{comum}: sem exigências específicas;
+  \item \textbf{frágil}: cuidados especiais, empilhamento máximo e necessidade de manter em pé;
+  \item \textbf{perecível}: faixa de temperatura permitida e validade;
+  \item \textbf{perigosa}: número ONU, classe de risco e grupo de embalagem.
+\end{itemize}
+Esse requisito gera uma \textbf{hierarquia de especialização} da entidade \texttt{Encomenda}, com quatro subtipos. A especialização é total (toda encomenda é de um dos quatro tipos) e disjunta (uma encomenda pertence a um único tipo). Não se trata de um simples atributo novo, pois cada subtipo possui atributos e restrições próprios.
+
+\paragraph{RA2 --- Embarque e ocorrências.}
+Uma nota fiscal pode ser transportada em um ou mais trechos, cada um realizado por um caminhão e com uma cidade de destino. Durante o trecho podem ocorrer eventos, como atraso, avaria, extravio ou entrega. O registro da ocorrência depende do conjunto \emph{nota + caminhão + trecho}, e não apenas da nota. Esse requisito gera uma \textbf{agregação}: o relacionamento \texttt{EMBARCA} entre \texttt{NotaFiscal} e \texttt{Caminhao} é tratado como um todo, materializado pela entidade \texttt{Embarque}; as ocorrências são registradas nesse contexto, por meio da entidade \texttt{Ocorrencia}.
+
+\subsection{Premissas adotadas}
+\label{sec:premissas}
+
+O enunciado não define alguns pontos necessários à modelagem. As premissas abaixo foram adotadas e são usadas de forma consistente no restante do trabalho.
+\begin{enumerate}[label=P\arabic*.,leftmargin=2.1em]
+  \item Todos os clientes são pessoas físicas, identificadas por CPF. O destinatário é um cliente previamente cadastrado.
+  \item Uma coleta pode conter uma ou mais encomendas; cada encomenda pertence a exatamente uma coleta.
+  \item Cada encomenda gera exatamente uma nota fiscal, e cada nota se refere a exatamente uma encomenda.
+  \item Cada nota é incluída em exatamente uma fatura; uma fatura pode agrupar várias notas. O pagador da fatura é o remetente ou o destinatário.
+  \item Existe no máximo um depósito por cidade, e nem toda cidade possui depósito. Cada coleta é entregue a um depósito.
+  \item Um caminhão atende uma ou mais cidades, e uma cidade pode ser atendida por vários caminhões.
+  \item Uma nota pode ter um ou mais embarques (trechos). Cada embarque usa um caminhão e tem uma cidade de destino; o último trecho coincide com a cidade de destino da coleta.
+  \item O valor do frete é 5\% do valor total da nota. O percentual é armazenado para permitir exceções.
+  \item A ``data de entrega da coleta'' é a data em que a coleta é entregue ao depósito; a ``data de entrega da mercadoria'' é a data registrada na nota fiscal.
+  \item A região agrupa cidades e é usada para separar as mercadorias no depósito.
+  \item ``Endereço completo'' corresponde a logradouro, número, complemento, bairro, cidade, UF e CEP.
+\end{enumerate}

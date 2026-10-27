@@ -1,0 +1,184 @@
+\section{Tarefa 2 --- Mapeamento para NoSQL}
+
+\subsection{Estratégia geral}
+
+O modelo foi mapeado para o MongoDB, que organiza os dados em coleções de documentos BSON. As decisões de mapeamento seguiram quatro critérios:
+\begin{enumerate}
+  \item \textbf{Embutir} dados que são acessados juntos, que dependem do documento pai e cuja quantidade é limitada (encomendas de uma coleta, trechos e ocorrências de uma nota).
+  \item \textbf{Referenciar} entidades com vida própria, compartilhadas por muitos documentos ou com crescimento não limitado (clientes, caminhões, cidades, regiões e depósitos).
+  \item \textbf{Guardar snapshots} dos dados usados em documentos fiscais (remetente, destinatário, encomenda, cidade e região), para preservar o histórico mesmo que o cadastro seja alterado.
+  \item \textbf{Desnormalizar} apenas dados pequenos e estáveis, como o nome da cidade e da região, para evitar junções em tempo de leitura.
+\end{enumerate}
+O resultado são oito coleções: \texttt{clientes}, \texttt{coletas}, \texttt{notas\_fiscais}, \texttt{faturas}, \texttt{caminhoes}, \texttt{cidades}, \texttt{regioes} e \texttt{depositos}.
+
+\subsection{Entidades}
+
+A Tabela~\ref{tab:nosql_entidades} comenta o mapeamento de cada entidade. As entidades dependentes (\texttt{Encomenda}, \texttt{Embarque} e \texttt{Ocorrencia}) não geram coleções próprias: elas são embutidas nos documentos dos quais dependem.
+
+{\small
+\begin{longtable}{@{}L{2.6cm}L{4.4cm}L{8.4cm}@{}}
+\caption{Mapeamento das entidades para o MongoDB}
+\label{tab:nosql_entidades}\\
+\toprule
+\textbf{Entidade} & \textbf{Onde fica} & \textbf{Estratégia e justificativa}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Entidade} & \textbf{Onde fica} & \textbf{Estratégia e justificativa}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\texttt{Cliente} & Coleção \texttt{clientes}; \texttt{\_id} = CPF. & Referência. O cliente é compartilhado por coletas e faturas e tem vida própria. O endereço é um subdocumento.\\
+
+\texttt{Coleta} & Coleção \texttt{coletas}; \texttt{\_id} = \texttt{codigo\_coleta}. & Raiz de agregado. Contém snapshots de remetente e destinatário, referência ao depósito e à cidade de destino e o array de encomendas.\\
+
+\texttt{Encomenda} & Array \texttt{encomendas[]} em \texttt{coletas}. & Embutir. A encomenda não existe sem a coleta e é sempre consultada com ela; a atualização do conjunto é atômica.\\
+
+\texttt{Encomenda\-Comum}, \texttt{Fragil}, \texttt{Perecivel}, \texttt{Perigosa} & Campo \texttt{tipo} + subdocumento \texttt{detalhes} em cada item de \texttt{encomendas[]}. & Polimorfismo. Os subtipos compartilham os atributos comuns; evita quatro coleções e mantém a leitura do agregado em uma única consulta.\\
+
+\texttt{NotaFiscal} & Coleção \texttt{notas\_fiscais}; \texttt{\_id} = \texttt{numero\_nota}. & Raiz de agregado. Guarda snapshots de remetente, destinatário, encomenda, cidade e região, além dos transportes e ocorrências.\\
+
+\texttt{Fatura} & Coleção \texttt{faturas}; \texttt{\_id} = \texttt{numero\_fatura}. & Raiz de agregado. Contém o snapshot do pagador e um resumo das notas (número e valor do frete), sem repetir a nota completa.\\
+
+\texttt{Caminhao} & Coleção \texttt{caminhoes}; \texttt{\_id} = \texttt{placa}. & Referência. É consultado isoladamente e possui um array de referências às cidades atendidas.\\
+
+\texttt{Cidade} & Coleção \texttt{cidades}; \texttt{\_id} = \texttt{codigo\_cidade}. & Referência. Guarda o nome da região desnormalizado, pois é um dado pequeno e estável.\\
+
+\texttt{Regiao} & Coleção \texttt{regioes}; \texttt{\_id} = \texttt{codigo\_regiao}. & Referência. É compartilhada por várias cidades e usada para agrupar mercadorias.\\
+
+\texttt{Deposito} & Coleção \texttt{depositos}; \texttt{\_id} = \texttt{codigo\_deposito}. & Referência. É compartilhado por muitas coletas; \texttt{cidade\_id} recebe índice único para garantir um depósito por cidade.\\
+
+\texttt{Embarque} & Array \texttt{transportes[]} em \texttt{notas\_fiscais}. & Embutir. Depende da nota, o número de trechos é limitado e o acesso é feito junto com a nota. O caminhão é referenciado.\\
+
+\texttt{Ocorrencia} & Array \texttt{transportes[].\allowbreak ocorrencias[]}. & Embutir. Depende do embarque; o array preserva o contexto do trecho (nota, caminhão e cidade).\\
+\end{longtable}
+}
+
+\subsection{Relacionamentos}
+
+A Tabela~\ref{tab:nosql_relacionamentos} mostra como cada relacionamento do MER foi representado. Em geral, os relacionamentos 1:N são resolvidos por embutimento quando o lado ``N'' é dependente e limitado, e por referência quando o lado ``N'' é uma entidade compartilhada.
+
+{\small
+\begin{longtable}{@{}L{3.0cm}L{5.6cm}L{6.4cm}@{}}
+\caption{Mapeamento dos relacionamentos para o MongoDB}
+\label{tab:nosql_relacionamentos}\\
+\toprule
+\textbf{Relacionamento} & \textbf{Representação no documento} & \textbf{Estratégia e justificativa}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Relacionamento} & \textbf{Representação no documento} & \textbf{Estratégia e justificativa}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\texttt{ENVIA} & \texttt{coletas.remetente} (\texttt{cpf}, nome, endereço, telefone). & Snapshot + referência implícita ao CPF. O documento de coleta precisa dos dados como foram registrados.\\
+
+\texttt{RECEBE} & \texttt{coletas.destinatario} (\texttt{cpf}, nome, endereço, telefone). & Snapshot + referência implícita ao CPF, pelo mesmo motivo.\\
+
+\texttt{CONTEM} & \texttt{coletas.encomendas[]}. & Embutir. As encomendas são dependentes da coleta e acessadas junto com ela.\\
+
+\texttt{GERA} & \texttt{notas\_fiscais.encomenda\_id} (único) + snapshot em \texttt{notas\_fiscais.encomenda}. & Referência única para garantir o 1:1; o snapshot preserva os dados da mercadoria na emissão.\\
+
+\texttt{COBRA} & \texttt{notas\_fiscais.fatura\_id}; resumo em \texttt{faturas.notas[]}. & Referência da nota para a fatura e array-resumo na fatura, evitando uma segunda consulta para listar as notas.\\
+
+\texttt{PAGA} & \texttt{faturas.pagador} (\texttt{cpf}, nome). & Snapshot do cliente pagador; o CPF identifica o cliente na coleção \texttt{clientes}.\\
+
+\texttt{ORIGINA} & \texttt{coletas.deposito\_origem} (\texttt{codigo}, nome). & Referência com snapshot do nome; o depósito é compartilhado e tem vida própria.\\
+
+\texttt{ENTREGA\_EM} & \texttt{coletas.cidade\_destino} (\texttt{codigo}, nome, UF, região). & Referência com desnormalização. A cidade e a região são pequenas e estáveis, e são necessárias na leitura da coleta.\\
+
+\texttt{SEDIA} & \texttt{depositos.cidade\_id} (único) + \texttt{cidades} sem array de depósitos. & Referência no lado do depósito; o índice único garante a cardinalidade 1:1.\\
+
+\texttt{AGRUPIA} & \texttt{cidades.regiao} (\texttt{codigo}, nome). & Referência com desnormalização do nome da região.\\
+
+\texttt{ATENDE} & \texttt{caminhoes.\allowbreak cidades\_atendidas[]} com \texttt{codigo}, nome e UF. & Array de referências. A lista é limitada e consultada com o caminhão; índice multikey para buscar por cidade.\\
+
+\texttt{EMBARCA} & \texttt{notas\_fiscais.\allowbreak transportes[]} com \texttt{caminhao\_id}, cidade de destino, ordem e datas. & Embutir + referência. O embarque depende da nota; o caminhão é referenciado e indexado.\\
+
+\texttt{DESTINO\_TRECHO} & \texttt{notas\_fiscais.\allowbreak transportes[].\allowbreak cidade\_destino}. & Referência com snapshot da cidade de cada trecho.\\
+
+\texttt{REGISTRA} & \texttt{notas\_fiscais.\allowbreak transportes[].\allowbreak ocorrencias[]}. & Embutir. A ocorrência depende do embarque; o array mantém o contexto do trecho.\\
+\end{longtable}
+}
+
+\subsection{Hierarquia (RA1)}
+
+A hierarquia de \texttt{Encomenda} foi mapeada como \textbf{polimorfismo em um único array}. Cada item de \texttt{coletas.encomendas[]} possui o campo \texttt{tipo}, que funciona como discriminador, e um subdocumento \texttt{detalhes} cujo conteúdo varia conforme o tipo. A alternativa de criar quatro coleções foi descartada porque os subtipos compartilham a maior parte dos atributos e são quase sempre lidos junto com a coleta; a validação dos campos obrigatórios de cada tipo pode ser feita por um \emph{JSON Schema} da coleção. O trecho a seguir mostra uma encomenda frágil e uma perecível.
+
+\needspace{4.6cm}
+\begin{lstlisting}[caption={Encomendas frágil e perecível embutidas em uma coleta},label={lst:hierarquia}]
+"encomendas": [
+  { "codigo": "E001", "tipo": "fragil", "descricao": "Vidros decorativos",
+    "valor": 1200.00, "peso_kg": 8.5, "volume_m3": 0.12,
+    "detalhes": { "cuidados_especiais": "Nao empilhar",
+                  "empilhamento_maximo": 2, "manter_em_pe": true } },
+  { "codigo": "E002", "tipo": "perecivel", "descricao": "Iogurte natural",
+    "valor": 350.00, "peso_kg": 12.0, "volume_m3": 0.08,
+    "detalhes": { "temperatura_min_c": 2, "temperatura_max_c": 8,
+                  "validade": "2026-11-05" } }
+]
+\end{lstlisting}
+
+\subsection{Agregação (RA2)}
+
+A agregação \texttt{EMBARCA} foi mapeada como um array de subdocumentos dentro da nota fiscal. Cada elemento de \texttt{notas\_fiscais.transportes[]} representa um embarque (trecho), referencia o caminhão por \texttt{caminhao\_id} e contém o array \texttt{ocorrencias[]}. Assim, a ocorrência fica registrada no contexto correto (nota, caminhão e trecho), sem precisar de uma coleção independente e sem risco de ficar órfã. O trecho abaixo ilustra uma nota com dois trechos e uma ocorrência.
+
+\needspace{9.5cm}
+\begin{lstlisting}[caption={Nota fiscal com embarques e ocorrências aninhados},label={lst:agregacao}]
+"transportes": [
+  { "codigo_embarque": "EM001", "caminhao_id": "ABC1D23",
+    "cidade_destino": { "codigo": "PIR", "nome": "Piripiri", "uf": "PI" },
+    "ordem_trecho": 1,
+    "data_hora_embarque": "2026-10-20T08:30:00Z",
+    "data_hora_desembarque": "2026-10-20T13:10:00Z",
+    "ocorrencias": [
+      { "codigo": "OC01", "tipo": "atraso",
+        "data_hora": "2026-10-20T13:40:00Z",
+        "descricao": "Trecho liberado com 30 min de atraso",
+        "status": "resolvida" } ] },
+  { "codigo_embarque": "EM002", "caminhao_id": "XYZ9K88",
+    "cidade_destino": { "codigo": "THE", "nome": "Teresina", "uf": "PI" },
+    "ordem_trecho": 2,
+    "data_hora_embarque": "2026-10-20T14:00:00Z",
+    "data_hora_desembarque": "2026-10-20T18:30:00Z",
+    "ocorrencias": [] }
+]
+\end{lstlisting}
+
+\subsection{Índices e padrões de acesso}
+
+A Tabela~\ref{tab:indices} lista os índices que sustentam as consultas mais frequentes do sistema. Além das chaves primárias (\texttt{\_id}), foram criados índices simples, únicos e multikey.
+
+{\small
+\begin{longtable}{@{}L{2.8cm}L{6.0cm}L{6.2cm}@{}}
+\caption{Índices previstos no modelo NoSQL}
+\label{tab:indices}\\
+\toprule
+\textbf{Coleção} & \textbf{Índice} & \textbf{Finalidade}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Coleção} & \textbf{Índice} & \textbf{Finalidade}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\texttt{coletas} & \texttt{\{"destinatario.cpf": 1\}} & Histórico de coletas por destinatário.\\
+\texttt{coletas} & \texttt{\{"cidade\_destino.codigo": 1\}} & Coletas por cidade de destino.\\
+\texttt{notas\_fiscais} & \texttt{\{encomenda\_id: 1\}}, único & Garantir a cardinalidade 1:1 com a encomenda.\\
+\texttt{notas\_fiscais} & \texttt{\{fatura\_id: 1\}} & Recuperar as notas de uma fatura.\\
+\texttt{notas\_fiscais} & \texttt{\{"transportes.\allowbreak caminhao\_id": 1\}} & Histórico de notas por caminhão (multikey).\\
+\texttt{notas\_fiscais} & \texttt{\{"transportes.\allowbreak ocorrencias.\allowbreak tipo": 1\}} & Consultar ocorrências por tipo (multikey).\\
+\texttt{faturas} & \texttt{\{"pagador.cpf": 1\}} & Histórico de faturas por pagador.\\
+\texttt{caminhoes} & \texttt{\{"cidades\_atendidas.\allowbreak codigo": 1\}} & Caminhões que atendem uma cidade (multikey).\\
+\end{longtable}
+}
+
+\subsection{Comentários sobre as escolhas}
+
+O modelo embute apenas os dados dependentes e limitados, referencia as entidades compartilhadas e usa snapshots para preservar o histórico dos documentos fiscais. Os valores \texttt{valor\_frete} e \texttt{valor\_frete\_total} são derivados: podem ser calculados na escrita ou em uma \emph{view}, e a aplicação mantém a consistência ao criar ou alterar notas e faturas.

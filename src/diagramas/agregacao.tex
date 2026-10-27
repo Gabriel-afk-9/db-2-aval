@@ -1,0 +1,69 @@
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % Entidades participantes
+  \node[draw=azul, thick, rounded corners=2pt, fill=azulclaro,
+        text width=4.0cm, align=left, font=\scriptsize, inner sep=3pt]
+        (nota) at (-5.3,5.6) {
+    \textbf{\normalsize NotaFiscal}\\[-2pt]
+    \rule{3.7cm}{0.4pt}\\[-3pt]
+    \underline{\texttt{numero\_nota}} (PK)\\
+    \texttt{data\_emissao}\\
+    \texttt{valor\_total}\\
+    \texttt{valor\_frete}\\
+    \texttt{data\_entrega\_destinatario}
+  };
+  \node[draw=azul, thick, rounded corners=2pt, fill=azulclaro,
+        text width=3.4cm, align=left, font=\scriptsize, inner sep=3pt]
+        (cam) at (5.3,5.6) {
+    \textbf{\normalsize Caminhao}\\[-2pt]
+    \rule{3.1cm}{0.4pt}\\[-3pt]
+    \underline{\texttt{placa}} (PK)\\
+    \texttt{modelo}\\
+    \texttt{capacidade\_kg}\\
+    \texttt{capacidade\_m3}
+  };
+
+  % Relacionamento agregado
+  \node[reladd, minimum width=1.9cm, minimum height=0.85cm] (embarca) at (0,5.6) {EMBARCA};
+  \draw[draw=cinza, thick] (nota.east) -- (embarca.west);
+  \draw[draw=cinza, thick] (embarca.east) -- (cam.west);
+  \node[card, above=2pt of embarca] {N:N};
+  \node[card, left=3pt of embarca] {(0,N)};
+  \node[card, right=3pt of embarca] {(0,N)};
+
+  % Caixa de agregacao
+  \node[agregacao, fit=(embarca), inner sep=0.55cm] (box) {};
+  \node[font=\scriptsize\itshape, text=laranja, anchor=south] at (box.north) {agregação};
+
+  % Entidade associativa materializada
+  \node[draw=laranja, thick, rounded corners=2pt, fill=laranjaclaro,
+        text width=5.2cm, align=left, font=\scriptsize, inner sep=3pt]
+        (emb) at (0,2.4) {
+    \textbf{\normalsize Embarque}\\[-2pt]
+    \rule{4.9cm}{0.4pt}\\[-3pt]
+    \underline{\texttt{codigo\_embarque}} (PK)\\
+    \texttt{numero\_nota} (FK) \quad \texttt{placa} (FK)\\
+    \texttt{codigo\_cidade\_destino} (FK)\\
+    \texttt{ordem\_trecho}\\
+    \texttt{data\_hora\_embarque}\\
+    \texttt{data\_hora\_desembarque}
+  };
+  \draw[seta] (embarca.south) -- (emb.north);
+  \node[rotulo, anchor=west] at (1.55,4.95) {materializa};
+
+  % Ocorrencia
+  \node[rel, minimum width=1.7cm, minimum height=0.75cm] (registra) at (0,-0.4) {REGISTRA};
+  \node[draw=laranja, thick, rounded corners=2pt, fill=laranjaclaro,
+        text width=4.8cm, align=left, font=\scriptsize, inner sep=3pt]
+        (oco) at (0,-2.5) {
+    \textbf{\normalsize Ocorrencia}\\[-2pt]
+    \rule{4.5cm}{0.4pt}\\[-3pt]
+    \underline{\texttt{codigo\_ocorrencia}} (PK)\\
+    \texttt{codigo\_embarque} (FK)\\
+    \texttt{tipo} \quad \texttt{data\_hora}\\
+    \texttt{descricao} \quad \texttt{status}
+  };
+  \draw[draw=cinza, thick, double, double distance=1.2pt] (emb.south) -- (registra.north);
+  \draw[draw=cinza, thick, double, double distance=1.2pt] (registra.south) -- (oco.north);
+  \node[card, anchor=west] at (0.6,0.05) {(0,N)};
+  \node[card, anchor=west] at (0.6,-0.95) {(1,1)};
+\end{tikzpicture}

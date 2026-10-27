@@ -1,0 +1,115 @@
+\begin{tikzpicture}[x=1cm,y=1cm,every node/.style={transform shape}]
+  % ---------- Entidades ----------
+  \node[ent] (cliente) at (-10.2,5.0) {Cliente};
+  \node[ent] (coleta) at (-5.0,5.0) {Coleta};
+  \node[ent] (encomenda) at (-0.2,5.0) {Encomenda};
+  \node[ent] (nota) at (4.6,5.0) {NotaFiscal};
+  \node[ent] (fatura) at (9.8,5.0) {Fatura};
+
+  \node[entref] (deposito) at (-10.2,1.0) {Deposito};
+  \node[entref] (cidade) at (-2.2,1.0) {Cidade};
+  \node[entref] (regiao) at (4.2,1.0) {Regiao};
+
+  \node[ent] (caminhao) at (-10.0,-3.6) {Caminhao};
+  \node[entadd] (embarque) at (0.6,-3.6) {Embarque};
+  \node[entadd] (ocorrencia) at (7.6,-3.6) {Ocorrencia};
+
+  % ---------- Relacionamentos ----------
+  \node[rel] (envia) at (-7.6,6.25) {ENVIA};
+  \node[rel] (recebe) at (-7.6,3.75) {RECEBE};
+  \node[rel] (origina) at (-8.2,2.05) {ORIGINA};
+  \node[rel] (contem) at (-2.6,5.0) {CONTEM};
+  \node[rel] (gera) at (2.2,5.0) {GERA};
+  \node[rel] (cobra) at (7.2,5.0) {COBRA};
+  \node[rel] (entrega) at (-3.7,3.0) {ENTREGA\\EM};
+  \node[rel] (sedia) at (-6.2,1.0) {SEDIA};
+  \node[rel] (agrupia) at (1.0,1.0) {AGRUPIA};
+  \node[rel] (atende) at (-6.2,-1.3) {ATENDE};
+  \node[rel] (embarca) at (-5.2,-3.6) {EMBARCA};
+  \node[rel] (destino) at (-0.4,-1.3) {DESTINO\\TRECHO};
+  \node[rel] (registra) at (4.0,-3.6) {REGISTRA};
+  \node[rel] (paga) at (-4.5,7.3) {PAGA};
+
+  % ---------- Ligações ----------
+  \draw[linha] (cliente.east) -- (envia.west);
+  \draw[linha] (envia.east) -- (coleta.west);
+  \draw[linha] (cliente.east) -- (recebe.west);
+  \draw[linha] (recebe.east) -- (coleta.west);
+
+  \draw[linha] (deposito.north) -- (origina.west);
+  \draw[linha] (origina.east) -- (coleta.south west);
+
+  \draw[linha] (coleta.east) -- (contem.west);
+  \draw[linha] (contem.east) -- (encomenda.west);
+  \draw[linha] (encomenda.east) -- (gera.west);
+  \draw[linha] (gera.east) -- (nota.west);
+  \draw[linha] (nota.east) -- (cobra.west);
+  \draw[linha] (cobra.east) -- (fatura.west);
+
+  \draw[linha] (coleta.south) -- (entrega.north);
+  \draw[linha] (entrega.south) -- (cidade.north west);
+
+  \draw[linha] (deposito.east) -- (sedia.west);
+  \draw[linha] (sedia.east) -- (cidade.west);
+  \draw[linha] (cidade.east) -- (agrupia.west);
+  \draw[linha] (agrupia.east) -- (regiao.west);
+
+  \draw[linha] (caminhao.north) -- (atende.south);
+  \draw[linha] (atende.north) -- (cidade.south west);
+
+  \draw[linha] (caminhao.east) -- (embarca.west);
+  \draw[linha] (embarca.east) -- (embarque.west);
+
+  \draw[linha] (embarque.north) -- (destino.south);
+  \draw[linha] (destino.north) -- (cidade.south east);
+
+  \draw[linha] (embarque.east) -- (registra.west);
+  \draw[linha] (registra.east) -- (ocorrencia.west);
+
+  % Pagador: rota superior
+  \draw[linha] (fatura.north) -- (9.8,7.3) -- (paga.east);
+  \draw[linha] (paga.west) -- (-10.2,7.3) -- (cliente.north);
+
+  % ---------- Cardinalidades ----------
+  \node[card, above left] at (envia.west) {(0,N)};
+  \node[card, above right] at (envia.east) {(1,1)};
+  \node[card, below left] at (recebe.west) {(0,N)};
+  \node[card, below right] at (recebe.east) {(1,1)};
+  \node[card, left] at (origina.west) {(0,N)};
+  \node[card, right] at (origina.east) {(1,1)};
+  \node[card] at (-3.35,5.62) {(1,N)};
+  \node[card] at (-1.85,5.62) {(1,1)};
+  \node[card] at (1.6,5.62) {(1,1)};
+  \node[card] at (2.8,5.62) {(1,1)};
+  \node[card] at (6.5,5.62) {(1,N)};
+  \node[card] at (7.9,5.62) {(1,1)};
+  \node[card, left] at (entrega.north) {(1,1)};
+  \node[card, right] at (entrega.south) {(0,N)};
+  \node[card, below] at (sedia.west) {(0,1)};
+  \node[card, below] at (sedia.east) {(1,1)};
+  \node[card, below] at (agrupia.west) {(0,N)};
+  \node[card, below] at (agrupia.east) {(1,1)};
+  \node[card, left] at (atende.south) {(1,N)};
+  \node[card, right] at (atende.north) {(0,N)};
+  \node[card, above] at (-6.5,-3.15) {(0,N)};
+  \node[card, above] at (-3.9,-3.15) {(0,N)};
+  \node[card, left] at (destino.south) {(1,1)};
+  \node[card, right] at (destino.north) {(0,N)};
+  \node[card, above] at (3.3,-3.15) {(0,N)};
+  \node[card, above] at (4.75,-3.15) {(1,1)};
+  \node[card, above left] at (paga.west) {(0,N)};
+  \node[card, above right] at (paga.east) {(1,1)};
+
+  % ---------- Papéis e anotações ----------
+  \node[rotulo, anchor=west] at (fatura.east) {pagador};
+  \node[agregacao, fit=(embarque), inner sep=0.18cm] {};
+
+  % ---------- Legenda ----------
+  \node[draw=cinza, rounded corners=2pt, fill=white, text width=7.2cm,
+        align=left, font=\scriptsize, inner sep=3pt] at (-7.6,-6.35) {
+    \textbf{Legenda.} Retângulo: entidade. Losango: relacionamento.
+    Linha dupla: participação total. $(m,n)$: cardinalidade mínima e máxima.
+    Caixa tracejada: agregação. Cores: base (azul), referência (verde),
+    adicional (laranja).
+  };
+\end{tikzpicture}

@@ -1,0 +1,487 @@
+ 
+ 
+ 
+ 
+ 
+UESPI – Campus Prof. Alexandre Alves de Oliveira
+Disciplina: Tópicos em Banco de Dados – 60
+Curso: CST em Sistemas de Computação
+Bloco: 5
+Alunos: 
+Data: 22/10/2026
+Prof. Fco Rocha
+Segunda Avaliação Semestral 
+NOTA 
+1. 
+APRESENTAÇÃO 
+ 
+O objetivo principal do trabalho é modelar um banco de dados relacional para um dado problema, 
+em seguida mapear o DER para a modelagem NoSQL. 
+ Cada grupo deverá ser composto por no máximo 4 alunos. 
+ Valor: 10,0 pontos 
+ A solução proposta deve ser inserida no SIGAA até às 23h59min do dia 30/10/2026. 
+ Todas as respostas devem está em um único arquivo, formato PDF. 
+ No corpo do arquivo deve aparecer o nome dos integrantes do grupo. 
+ 
+2. 
+DESCRIÇÃO DO TRABALHO 
+ 
+Os alunos deverão modelar um banco de dados (BD) a partir do conjunto de requisitos descritos 
+na seção 3 – REQUISITOS DO TRABALHO. Além disso, cada grupo deverá definir 2 requisitos 
+adicionais ao problema, descrevê-los e modelá-los. 
+Os requisitos adicionais definidos pelos alunos devem gerar uma nova entidade, uma nova 
+relação, o surgimento de uma agregação ou uma hierarquia. Não serão considerados requisitos 
+adicionais que sejam modelados apenas acrescentando um novo atributo às entidades já descritas. 
+Quando os requisitos descritos não forem suficientes para fazer a modelagem, os alunos devem 
+descrever o que eles estão supondo como requisitos para fazer a modelagem. Ex: se em um dado 
+requisito gerar um tipo de relacionamento, mas não for possível estabelecer cardinalidade do mesmo 
+ou a restrição de participação, os alunos deverão descrever o que será assumido nesse caso. 
+O trabalho é dividido em Tarefas. Em cada tarefa um documento deve ser gerado com as ações 
+realizadas pelo grupo, conforme descrito a seguir: 
+ 
+Tarefa 1: Modelar o BD usando o Modelo Entidade-Relacionamento (MER). Para esta atividade, o 
+Diagrama Entidade-Relacionamento (DER) deve ser usado. É importante que os requisitos adicionais 
+definidos pelos alunos sejam também entregues e modelados. Para cada um dos itens descritos na 
+seção 3, informar como estes foram modelados usando o MER. Valor da tarefa 1: 4,0 pontos. 
+ 
+Tarefa 2: Mapear o MER para o Modelo NoSQL, comentando quais escolhas foram feitas para o 
+mapeamento de cada uma das entidades, relacionamentos, hierarquias e agregações. Valor da 
+tarefa 2: 6,0 pontos. 
+ 
+
+
+===PAGE BREAK===
+
+ 
+ 
+ 
+ 
+ 
+UESPI – Campus Prof. Alexandre Alves de Oliveira
+Disciplina: Tópicos em Banco de Dados – 60
+Curso: CST em Sistemas de Computação
+Bloco: 5
+Alunos: 
+Data: 22/10/2026
+Prof. Fco Rocha
+Segunda Avaliação Semestral 
+NOTA 
+ 
+3. 
+REQUISITOS DO TRABALHO 
+ 
+O quadro a seguir lista os problemas cuja solução deve ser proposta pelos alunos. Ao lado consta 
+a relação dos componentes do grupo. 
+ 
+PROBLEMAS PROPOSTOS 
+EQUIPE DE TRABALHO 
+1. Reserva de Passagens Aéreas 
+Mayara, Henrique Veras, Irapuam Junio, Luis Felipe 
+2. Locadora de Veículos 
+Kauã Neres, Fabrício Fontenele, Gabriel Pinto, Eric Silva 
+3. Almoxarifado 
+Samuel Penha, Paulo Henrique, Erick Vieira, Jordan 
+4. Controle Acadêmico 
+Mariana Mota, Wilk Neves, Cristian Brandão, Enzo Falcão 
+5. Administração de Cirurgias 
+José Maranhão, Francisco Neto, Willamy Josué, Alan Castro 
+6. Transportadora 
+Felipe Martins, Vitor Santos, Francisco Osmar, Gabriel Lima 
+7. Imobiliária 
+Victor Emanoel, Richard Brito, Ruan Anjos, Adonias Terceiro 
+ 
+ 
+A seguir, a descrição de cada problema cuja solução deve ser proposta pelos alunos, conforme o 
+quadro acima. 
+ 
+ 
+
+
+===PAGE BREAK===
+
+ 
+ 
+ 
+ 
+ 
+UESPI – Campus Prof. Alexandre Alves de Oliveira
+Disciplina: Tópicos em Banco de Dados – 60
+Curso: CST em Sistemas de Computação
+Bloco: 5
+Alunos: 
+Data: 22/10/2026
+Prof. Fco Rocha
+Segunda Avaliação Semestral 
+NOTA 
+ 
+1. 
+Sistema de Reserva de Passagens Aéreas 
+ 
+O sistema para reservas de passagens aéreas contará com um banco de dados central, que será 
+acessado por aplicações rodando tanto dentro da própria companhia quanto fora dela. A transação 
+central do sistema é a reserva. Uma reserva é identificada por um código gerado pelo sistema em 
+computador. A reserva é feita para um único passageiro, do qual se conhece apenas o nome. A 
+reserva compreende um conjunto de trechos de voos, que acontecerão em determinada data e hora. 
+Para cada trecho, a reserva é feita em uma classe (econômica, executiva, etc.). Um voo é 
+identificado por um código e possui uma origem e um destino. Por exemplo, o voo 343 sai de 
+Parnaíba com destino a Teresina. Um voo é composto de vários trechos, correspondendo às escalas 
+intermediárias do voo. Por exemplo, o vôo 343 é composto de dois trechos, um de Parnaíba a Piripiri, 
+e de Piripiri a Teresina. Vale destacar que há cidades que são servidas por vários aeroportos, assim 
+é importante informar ao passageiro que faz a reserva, qual é o aeroporto no qual o voo passa. Às 
+vezes os clientes, ao fazer a reserva, querem saber qual é o tipo de aeronave que será utilizada em 
+determinado trecho de voo. Nem todos os voos operam em todos os dias da semana. Inclusive, 
+certos voos têm pequenas mudanças de horário em certos dias da semana. Cada reserva possui um 
+prazo de validade. Caso os bilhetes não tenham sido emitidos, até esgotar-se o prazo da reserva, a 
+mesma é cancelada. Reservas podem ser prorrogadas. Como o “check-in” de todos os voos está 
+informatizado, a companhia possibilita a reserva de assento para o passageiro. As reservas de 
+assento podem ser feitas com até três meses de antecedência Além de efetivar reservas, o sistema 
+deve servir para vários tipos de consultas que os clientes podem querer fazer: a) possibilidades de 
+viagem de uma cidade ou de um aeroporto para outro; b) o mesmo do item (a), mas restrito a 
+determinados dias da semana; c) horários de chegada ou de saída em determinados voos; d) 
+disponibilidade de vagas em um trecho de voo; e) disponibilidade de determinados assentos em um 
+trecho de voo. 
+ 
+
+
+===PAGE BREAK===
+
+ 
+ 
+ 
+ 
+ 
+UESPI – Campus Prof. Alexandre Alves de Oliveira
+Disciplina: Tópicos em Banco de Dados – 60
+Curso: CST em Sistemas de Computação
+Bloco: 5
+Alunos: 
+Data: 22/10/2026
+Prof. Fco Rocha
+Segunda Avaliação Semestral 
+NOTA 
+ 
+2. 
+Sistema de Locadora de Veículos 
+ 
+Deve-se projetar um sistema de banco de dados de uma empresa de locação de veículos. A 
+empresa em questão aluga motocicletas, automóveis, camionetas de passageiros e camionetas de 
+carga. Ela atende a dois mercados, o das pessoas físicas e o das pessoas jurídicas. Para acelerar o 
+atendimento, é importante conhecer os dados dos clientes que já tenham usado a locadora no 
+passado. Para cada pessoa física é necessário conhecer seu nome, sexo, data de nascimento, 
+endereço completo, CPF, telefone, e-mail, e se o cliente permitir, guardar também um número do 
+cartão de crédito, com data de validade e código de segurança. Já para as pessoas jurídicas é 
+necessário conhecer seu razão social, nome de fantasia, CNPJ, inscrição estadual se tiver, endereço 
+completo, telefone e e-mail. Os clientes são identificados por um código interno gerado pelo sistema 
+da locadora. A empresa tem uma grande rede de filiais, espalhada pelo nordeste do país. Em algum 
+momento, um veículo encontra-se sob a responsabilidade de uma filial. Entretanto, como veículos 
+podem ser alugados para viagens em um sentido somente, eles podem mudar de filial. Um veículo é 
+identificado pela sua placa, porém ainda se armazena o número do chassi, o número do motor, a 
+marca, o tipo e a cor do veículo. 
+O sistema em computador deverá registrar: a) os veículos disponíveis em determinada filial na data 
+corrente; b) as reservas para veículos em uma filial, com previsão de que veículos estarão 
+disponíveis em uma data futura; c) os veículos presentemente alugados pela filial, o ponto de entrega 
+(caso seja diferente do local de locação) e data de entrega prevista. Os veículos são classificados 
+por uma tabela de tipos. Por exemplo, P3 corresponde a automóveis pequenos, de quatro portas e 
+com ar-condicionado (Uno, Pálio, Mobi, Kwid, etc.) e G4 a grandes automóveis de luxo (SW4, Pajero 
+Full ou similar). As reservas não são feitas para uma marca ou modelo de veículo, mas para um tipo 
+de veículo. Para tipos de automóveis, os clientes desejam saber o tamanho (classificado em 
+pequeno, médio e grande), a capacidade de passageiros, o número de portas, bem como se possui 
+os seguintes acessórios: ar-condicionado, GPS, Som, direção hidráulica ou elétrica e câmbio 
+automático ou não. Para tipos de camionetas de passageiros, as informações são as mesmas que 
+para automóveis. Já para tipos de camionetas de carga, as informações acima não são relevantes. 
+Neste caso, os clientes desejam saber a capacidade de carga da camioneta. 
+Para cada tipo de veículo, há um determinado número de horas necessário para limpeza e revisão 
+de entrega, entre uma reserva e outra. Além disso, o sistema deve programar as revisões dos 
+veículos, impedindo que sejam reservados quando há revisões pendentes. Esta programação é feita 
+com base em um conjunto de parâmetros que são a quilometragem atual do veículo, a 
+quilometragem média diária de um veículo, bem como em uma tabela de revisões do tipo de veículo. 
+A seguradora dos veículos exige que para cada veículo alugado seja mantida a identificação do 
+motorista, o número de sua habilitação e data de vencimento da mesma. A habilitação não pode 
+vencer dentro do prazo da locação. 
+ 
+ 
+
+
+===PAGE BREAK===
+
+ 
+ 
+ 
+ 
+ 
+UESPI – Campus Prof. Alexandre Alves de Oliveira
+Disciplina: Tópicos em Banco de Dados – 60
+Curso: CST em Sistemas de Computação
+Bloco: 5
+Alunos: 
+Data: 22/10/2026
+Prof. Fco Rocha
+Segunda Avaliação Semestral 
+NOTA 
+ 
+3. 
+Sistema de Almoxarifado 
+ 
+O almoxarifado pertence a um grupo de empresas do ramo industrial e serve para estocar peças 
+destinadas às várias empresas do grupo. Cada empresa do grupo é considerada um cliente do 
+almoxarifado. O almoxarifado está organizado em corredores. Cada corredor possui vários 
+receptáculos para peças (um receptáculo é uma bacia retangular de material plástico). Os 
+receptáculos são todos do mesmo tamanho. Os corredores são numerados e os receptáculos são 
+numerados por corredor. Por exemplo, o receptáculo 2-10 é o décimo receptáculo do segundo 
+corredor. Em uma das extremidades do almoxarifado encontra-se o setor de recepção de peças. Lá 
+chegam as peças entregues pelos fornecedores. Quando ocorre a chegada de peças, a primeira 
+atividade é registrar na ordem de compra a chegada das peças. Uma cópia de toda ordem de 
+compra é sempre enviada ao setor de recepção. Assim, neste setor sempre se sabee quais as peças 
+que estão por ser entregues. As ordens de compra são geradas no setor de compras e apenas 
+repassadas ao almoxarifado. Uma entrega corresponde sempre a uma ordem de compra. Entretanto, 
+são admitidas entregas parciais, isto é, entregas que não completam a ordem de compra completa. 
+Em uma entrega podem ser entregues diferentes quantidades de diferentes peças. As peças 
+recebidas são colocadas sobre um estrado. Este estrado é então levado para o almoxarifado por 
+uma empilhadeira e as peças são distribuídas nos receptáculos. Um estrado pode conter diferentes 
+peças. Para cada peça, procura-se um receptáculo que já contenha unidades da peça em questão e 
+que ainda tenha espaço para a carga chegada. Caso não haja um receptáculo nestas condições, 
+procura-se um receptáculo vazio. A saída do almoxarifado se dá por meio dos pedidos de clientes. 
+Um pedido pode solicitar vários tipos de peças. Todas as peças que atendem um pedido são 
+juntadas, embaladas e colocadas em uma rampa de carga (numerada) onde encosta o caminhão do 
+cliente. Não há pedidos pendentes, isto é, os clientes sempre pedem quantidades de peças que há 
+em estoque. O objetivo do sistema é o de aumentar o lucro do almoxarifado, ajudando sua equipe a 
+guardar e recuperar itens mais rapidamente e a conhecer as quantidades estocadas. O almoxarifado 
+é de grande porte e constantemente há várias empilhadeiras circulando por ele tanto para estocar 
+entregas quando para buscar peças referentes a um pedido. Detalhes importantes: O almoxarifado 
+somente atende empresas. É necessário manter um cadastro de clientes com CNPJ, razão social, 
+nome de fantasia, endereço, telefone e e-mail para contato. Para cada peça é necessário conhecer 
+seu UPC (“Universal Product Code”), descrição e número interno à organização. Para cada entrega, 
+o setor de recepção monta uma lista de distribuição, que instrui o operador sobre que peças, em 
+quantidade ele deve estocar em que receptáculos. Para cada pedido, o setor de saída monta uma 
+lista de busca, que instrui o operador sobre que peças, em qual quantidade ele deve buscar em que 
+receptáculos. Em termos de processos, é necessário que o sistema processe o seguinte: a) Dê as 
+ordens de distribuição de peças chegadas para cada chegada; b) Dê as ordens para busca cada 
+pedido; c) Mantenha a quantidade estocada de cada item e de cada receptáculo; d) Informe qual(is) 
+peça(s) e em qual(is) quantidade(s) deve(m) ser estocada(s) ou buscada(s) em que receptáculo(s). 
+Em termos específicos de transações devem ser consideradas: 1) Transações de chegada: Registro 
+da chegada de produtos; Instruções para estocagem (em que estrado, em que receptáculos); 
+Confirmação da estocagem em um receptáculo. 2) Transações de saída de produtos: Registro de um 
+pedido; Geração da lista de busca; Confirmação da busca; 3) Consolidação de receptáculos (juntar 
+as peças de mesmo tipo de dois receptáculos diferentes). Em sua primeira versão o sistema ainda 
+não fará controle de empilhadeiras ou estrados disponíveis e em uso. 
+
+
+===PAGE BREAK===
+
+ 
+ 
+ 
+ 
+ 
+UESPI – Campus Prof. Alexandre Alves de Oliveira
+Disciplina: Tópicos em Banco de Dados – 60
+Curso: CST em Sistemas de Computação
+Bloco: 5
+Alunos: 
+Data: 22/10/2026
+Prof. Fco Rocha
+Segunda Avaliação Semestral 
+NOTA 
+ 
+4. 
+Sistema de Controle Acadêmico 
+ 
+Projete um sistema de banco de dados de um sistema acadêmico que considera alunos, professores, 
+colaboradores, disciplinas e atividades docentes. Todo professor é também um funcionário. 
+Professores e funcionários tem um nome, um endereço, um telefone residencial e comercial, tem um 
+CPF e um salário. Os professores atuam com ensino, pesquisa e extensão. Cada professor está 
+lotado em um departamento, que tem uma descrição e uma sigla. Como ensino, os professores 
+ministram pelo menos 2 disciplinas. Os professores atuam na graduação e na pós-graduação, 
+ministrando disciplinas diferentes em ambos os tipos de cursos. 
+Na pós-graduação os professores lecionam disciplinas e fazem pesquisa, produzindo publicações. 
+Estas publicações podem ser artigos em congressos internacionais e nacionais, capítulos de livro, 
+livros completos ou artigos em periódicos. Cada uma destas publicações tem as seguintes 
+características: titulo, autor, impacto (qualis A internacional, qualis A nacional, qualis B internacional, 
+qualis B nacional, qualis C internacional e qualis C nacional), número de paginas, nome do evento ou 
+periódico de publicação, ano de publicação, editora. 
+Como extensão os professores realizam atividades como: ministrar cursos, coordenar projetos de 
+extensão e revisar/avaliar artigos de congressos e/ou de periódicos, sendo características desta 
+atividade um código da atividade, uma descrição, a data e a duração. 
+O aluno está matriculado em um curso que é oferecido pelo departamento. O aluno possui como 
+atributos um nome, endereço, telefone, matricula e CPF. O aluno, a cada semestre, se matricula em 
+uma ou mais disciplinas, sendo que uma disciplina pode ter uma ou mais turmas. Para saber o 
+histórico do aluno é necessário armazenar as disciplinas cursadas em cada semestre e a respectiva 
+nota do aluno. Cada disciplina possui um código, um nome, carga horária, o número de créditos (2, 
+4, ou 6) e pode ter ou não um ou mais pré-requisitos. 
+ 
+ 
+ 
+
+
+===PAGE BREAK===
+
+ 
+ 
+ 
+ 
+ 
+UESPI – Campus Prof. Alexandre Alves de Oliveira
+Disciplina: Tópicos em Banco de Dados – 60
+Curso: CST em Sistemas de Computação
+Bloco: 5
+Alunos: 
+Data: 22/10/2026
+Prof. Fco Rocha
+Segunda Avaliação Semestral 
+NOTA 
+ 
+5. 
+Sistema de Administração de Cirurgias 
+ 
+Para este problema foi fornecido um conjunto de informações obtidas em uma reunião para definir o 
+que o sistema deve controlar e realizar na visão dos usuários administradores. Em um hospital 
+existem diversas salas em seu centro cirúrgico. As salas de cirurgia possuem recursos para grupos 
+de especialidades médicas, sendo apropriadas para cirurgias de uma especialidade. Existem salas 
+que se prestam somente a cirurgias de uma única especialidade, pois estão dotadas de 
+equipamentos apropriados a essa especialidade médica. 
+Os médicos que realizam cirurgias no hospital em seus pacientes agendam as cirurgias conforme a 
+disponibilidade das salas, informando datas, hora inicial e hora final prevista, junto à operadora do 
+sistema. Os horários para controle das salas são modulados de 30 em 30 minutos, de forma a 
+manter-se uma quebra equilibrada da distribuição de horários. Quando uma cirurgia é encerrada, é 
+informado ao controle do Centro Cirúrgico para a preparação e higienização para a próxima 
+ocupação. Uma sala de cirurgia não pode ser utilizada simultaneamente por mais de uma cirurgia, 
+pois somente existe um leito cirúrgico em cada uma. 
+Um médico não pode ter cirurgias coincidentes em data e horário, mesmo que em salas diferentes. 
+Uma cirurgia somente deve ser realizada em uma sala apropriada para a sua especialidade. 
+Admitem-se urgências, porém devem ser destacadas para utilizarem salas que não as específicas da 
+especialidade. Urgência é considerada uma qualificação da cirurgia, mas não tem restrição de 
+especialidade, podendo utilizar qualquer uma das salas. Toda cirurgia tem somente um médico 
+responsável, que devemos registrar para o controle do sistema. Os medicamentos, materiais e 
+remédios consumidos pela cirurgia devem ser computados para cobrança posterior. O paciente é 
+identificado pelo hospital, inclusive com o seu leito de internação e datas. Não existe no sistema 
+nenhum controle pré-cirúrgico. O sistema deve controlar cirurgias marcadas, assim como as já 
+realizadas. 
+Para o Centro Cirúrgico especialidade é um dado do tipo: Cardiorrespiratória, Nefrologia, Ginecologia 
+e Obstetrícia, Transplantes, Gastroenterologia, Oftalmologia, Traumatologia, Cirurgia Plástica, 
+Oncologia, etc. Os médicos são todos registrados como habilitados no hospital, suas especialidades 
+também controladas, podendo realizar cirurgias em somente uma especialidade. São considerados 
+materiais gastos em uma cirurgia as agulhas de sutura, algodões, sangue, gaze. Como 
+medicamentos temos produtos como anestésicos em geral, anti-sépticos, soro, etc., e remédios 
+diversos como aplicação intravenosa 
+ 
+ 
+
+
+===PAGE BREAK===
+
+ 
+ 
+ 
+ 
+ 
+UESPI – Campus Prof. Alexandre Alves de Oliveira
+Disciplina: Tópicos em Banco de Dados – 60
+Curso: CST em Sistemas de Computação
+Bloco: 5
+Alunos: 
+Data: 22/10/2026
+Prof. Fco Rocha
+Segunda Avaliação Semestral 
+NOTA 
+ 
+6. 
+Sistema de Transportadora 
+ 
+Você deseja enviar/transportar alguma mercadoria/produto para alguém ou algum lugar que não é 
+enviado pelos correios, então precisa ser transportado por uma transportadora. Inicialmente o cliente 
+contata a transportadora que então registra uma coleta no endereço indicado pelo cliente. O cliente é 
+o remetente e a pessoa que irá receber a mercadoria é o destinatário, que também será um cliente. 
+Para o remetente e o destinatário o sistema deve armazenar o nome completo, CPF, telefone, e-mail 
+e endereço completo. No documento de coleta a transportadora registra o CPF, o nome do 
+remetente, o nome do destinatário, o endereço e telefone de ambos, os dados da mercadoria 
+(encomenda), seu valor, peso e tamanho (em metros cúbicos). Para transportar a mercadoria de um 
+lugar para outro, a transportadora precisa emitir uma nota fiscal da mercadoria transportada. Assim, 
+todos os caminhões em uma cidade realizando coletas chegam ao depósito da transportadora, sendo 
+que a transportadora tem apenas um único deposito em cada cidade, descarregam todas as 
+mercadorias dentro do depósito, fazendo grupos de mercadorias de acordo com a cidade ou região 
+de destino. Para cada mercadoria é gerada uma nota fiscal com o remetente e o destinatário, 
+buscando os dados cadastrados na coleta, inclusive a mercadoria. A coleta tem também a data da 
+entrega da coleta. As mercadorias são então carregadas dentro de caminhões, onde cada caminhão 
+será destinado para uma ou muitas cidades. Mais de um caminhão pode ser enviado para a mesma 
+cidade. Para cada nota fiscal, além dos dados do remetente e do destinatário é calculado o valor do 
+frete, que normalmente corresponde a 5% do valor total da nota fiscal. A nota fiscal tem um atributo 
+data da entrega da mercadoria ao destinatário. A nota fiscal não é paga pelo cliente, pois 
+simplesmente é um documento que é gerado para poder transportar legalmente a mercadoria. 
+Quando esta nota é gerada é também gerada uma fatura do valor do frete, que irá conter um número 
+da fatura, a data de emissão, a data de vencimento, valor do frete, nome do cliente pagador, que 
+neste caso pode ser o remetente ou o destinatário. A fatura pode envolver varias notas. 
+ 
+ 
+ 
+
+
+===PAGE BREAK===
+
+ 
+ 
+ 
+ 
+ 
+UESPI – Campus Prof. Alexandre Alves de Oliveira
+Disciplina: Tópicos em Banco de Dados – 60
+Curso: CST em Sistemas de Computação
+Bloco: 5
+Alunos: 
+Data: 22/10/2026
+Prof. Fco Rocha
+Segunda Avaliação Semestral 
+NOTA 
+7. 
+Sistema de Imobiliária 
+ 
+Para cada imóvel registrado é importante saber se o imóvel está disponível para venda ou locação 
+ou se ele já foi vendido ou locado. Isso ajudará a filtrar a pesquisa por imóveis. Para cada imóvel e 
+importante armazenar um ou mais fotos. O armazenamento pode ser por exemplo, o nome do 
+arquivo da foto do imóvel. Também é importante armazenar a data da construção do imóvel. Os 
+imóveis da imobiliária podem pertencer a uma dentre quatro categorias: casa, apartamento, terreno 
+ou sala comercial. Para os imóveis da categoria casa, as seguintes informações devem ser 
+armazenadas: quantidade de quartos, quantidade de suítes, quantidade de salas de estar, 
+quantidade de salas de jantar, numero de vagas na garagem, área (em metros quadrados), se possui 
+armário embutido, descrição (algum detalhe a mais que se deseja informar sobre a casa). Para os 
+imóveis da categoria apartamento, as seguintes informações devem ser armazenadas: quantidade 
+de quartos, quantidade de suítes, quantidade de salas de estar, quantidade de salas de jantar, 
+numero de vagas na garagem, área (em metros quadrados), se possui armário embutido, descrição 
+(algum detalhe a mais que se deseja informar sobre o apartamento), andar, valor do condomínio, 
+indicativo se o condomínio possui portaria 24hs. Para os imóveis da categoria sala comercial, as 
+seguintes informações devem ser armazenadas: área em metros quadrados, quantidade de 
+banheiros, quantidade de cômodos. Para os imóveis da categoria terreno, as seguintes informações 
+devem ser armazenadas: área (em metros quadrados), largura, comprimento, se o terreno possui 
+aclive/declive. Para cada imóvel disponível para locação ou venda é importante saber o seu 
+endereço completo, sendo muito importante cadastrar o bairro no qual o imóvel está localizado, pois 
+este campo ajudará a filtrar várias pesquisas feitas por cliente. É também importante armazenar o 
+valor de venda ou de aluguel de cada imóvel. Este é o valor sugerido pelo cliente. Após o imóvel ser 
+alugado/vendido é importante registrar o valor real de aluguel/venda, indicando quanto desse valor 
+será destinado à imobiliária. Cada imóvel disponível para venda ou locação deve estar associado a 
+um cliente da imobiliária, nomeado cliente proprietário. Um imóvel pode pertencer a mais de um 
+cliente proprietário e um cliente proprietário pode ter mais de um imóvel na imobiliária. Os clientes 
+proprietários da imobiliária devem ser cadastrados no sistema e as seguintes informações devem ser 
+cadastradas: cpf, nome, endereço, telefones de contato, e-mail, sexo, estado civil, profissão. Cada 
+imóvel vendido ou alugado deve estar associado a um cliente da imobiliária, nomeado cliente 
+usuário. Os clientes usuários da imobiliária devem ser cadastrados no sistema e as seguintes 
+informações devem ser cadastradas: cpf, nome, endereço, telefones de contato, e-mail, sexo, estado 
+civil, profissão. Caso o cliente usuário vá alugar um imóvel também devem ser armazenados : fiador 
+(pelo menos 1) e indicações (pelo menos 2). Registrar a data que um imóvel foi colocado à venda ou 
+para alugar. Também é importante registrar quando o imóvel foi alugado ou vendido. Alguns imóveis, 
+embora sejam anunciado para venda ou aluguel, acabam sendo retirados da imobiliária por decisão 
+do cliente proprietário. É preciso armazenar no banco a informação de que o imóvel não foi 
+alugado/vendido, mas não está mais disponível para locação/venda. Para cada venda ou aluguel é 
+necessário registrar o funcionário que fez a transação, bem como o valor da comissão que será 
+destinado a esse funcionário. Um funcionário pode realizar mais de uma transação. Para cada um 
+dos funcionários da imobiliária é importante armazenar: nome, telefone, cpf, endereço, telefone 
+contato, telefone celular, data ingresso imobiliária, cargo e salário, o qual é calculado a partir do seu 
+salário base mais a porcentagem das comissões que ele recebe. Também é importante armazenar 
+os dados para login no sistema, como usuário e senha. Para a senha é importante ter um campo que 
+consiga armazenar pelo menos 128 caracteres. Você pode supor que a criptografia da senha será 
+feita por software. Os cargos disponíveis na imobiliária devem ser previamente cadastrados. Cada 
+cargo possui um salário base. Para cada transação (venda ou aluguel) é necessário realizar um 
+registro no banco que contenha além dos dados do imóvel, do cliente e do funcionário, a data que foi 
+realizada a transação, o nro do contrato (que é um nro sequencial que identifica cada um dos 
+contratos da empresa) e a forma de pagamento. As formas de pagamento disponíveis na empresa 
+devem ser previamente cadastradas. Se um mesmo imóvel é colocado mais de uma vez para venda 
+ou aluguel, somente a informação mais recente deve ser armazenada. As informações mais antigas 
+a respeito do imóvel vão para uma tabela de histórico. 

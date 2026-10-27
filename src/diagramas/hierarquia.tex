@@ -1,0 +1,68 @@
+\begin{tikzpicture}[x=1cm,y=1cm,every node/.style={transform shape}]
+  % Supertipo
+  \node[draw=azul, thick, rounded corners=2pt, fill=azulclaro,
+        text width=8.4cm, align=left, font=\scriptsize, inner sep=4pt]
+        (enc) at (0,4.9) {
+    \textbf{\normalsize Encomenda}\\[-2pt]
+    \rule{8.0cm}{0.4pt}\\[-3pt]
+    \underline{\texttt{codigo\_encomenda}} (PK)\\
+    \texttt{codigo\_coleta} (FK) \quad \texttt{descricao}\\
+    \texttt{valor} \quad \texttt{peso\_kg} \quad \texttt{volume\_m3}\\
+    \texttt{tipo\_encomenda} (discriminador)
+  };
+
+  % Circulo de especializacao
+  \node[draw=roxo, thick, circle, fill=roxoclaro, minimum size=0.75cm,
+        font=\small\bfseries] (esp) at (0,3.05) {d};
+  \draw[draw=cinza, thick, double, double distance=1.3pt] (enc.south) -- (esp.north);
+  \node[font=\scriptsize\itshape, anchor=west] at (0.45,3.05) {total, disjunta};
+
+  % Barra de distribuicao
+  \draw[draw=cinza, thick] (esp.south) -- (0,2.1);
+  \draw[draw=cinza, thick] (-6.3,2.1) -- (6.3,2.1);
+
+  % Subtipos
+  \node[entsub, text width=3.75cm] (comum) at (-6.3,0.15) {
+    \textbf{\footnotesize EncomendaComum}\\[-1pt]
+    \rule{3.5cm}{0.3pt}\\[-2pt]
+    \underline{\texttt{codigo\_encomenda}} (PK/FK)\\
+    \textit{Sem atributos específicos}
+  };
+  \node[entsub, text width=3.75cm] (fragil) at (-2.1,0.15) {
+    \textbf{\footnotesize EncomendaFragil}\\[-1pt]
+    \rule{3.5cm}{0.3pt}\\[-2pt]
+    \underline{\texttt{codigo\_encomenda}} (PK/FK)\\
+    \texttt{cuidados\_especiais}\\
+    \texttt{empilhamento\_maximo}\\
+    \texttt{manter\_em\_pe}
+  };
+  \node[entsub, text width=3.75cm] (perec) at (2.1,0.15) {
+    \textbf{\footnotesize EncomendaPerecivel}\\[-1pt]
+    \rule{3.5cm}{0.3pt}\\[-2pt]
+    \underline{\texttt{codigo\_encomenda}} (PK/FK)\\
+    \texttt{temperatura\_min\_c}\\
+    \texttt{temperatura\_max\_c}\\
+    \texttt{validade}
+  };
+  \node[entsub, text width=3.75cm] (perig) at (6.3,0.15) {
+    \textbf{\footnotesize EncomendaPerigosa}\\[-1pt]
+    \rule{3.5cm}{0.3pt}\\[-2pt]
+    \underline{\texttt{codigo\_encomenda}} (PK/FK)\\
+    \texttt{numero\_onu}\\
+    \texttt{classe\_risco}\\
+    \texttt{grupo\_embalagem}
+  };
+
+  % Liga barra aos subtipos
+  \draw[draw=cinza, thick] (-6.3,2.1) -- (comum.north);
+  \draw[draw=cinza, thick] (-2.1,2.1) -- (fragil.north);
+  \draw[draw=cinza, thick] (2.1,2.1) -- (perec.north);
+  \draw[draw=cinza, thick] (6.3,2.1) -- (perig.north);
+
+  % Nota
+  \node[draw=cinza, dashed, rounded corners=2pt, fill=white, text width=13.6cm,
+        align=center, font=\scriptsize, inner sep=3pt] at (0,-2.2) {
+    Toda encomenda pertence a exatamente um dos quatro subtipos (especialização total e disjunta).
+    O discriminador \texttt{tipo\_encomenda} deve corresponder ao subtipo instanciado.
+  };
+\end{tikzpicture}

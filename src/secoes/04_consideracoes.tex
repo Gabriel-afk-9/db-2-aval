@@ -1,0 +1,5 @@
+\section{Considerações finais}
+
+O modelo apresentado cobre os requisitos da Seção~3 do enunciado: clientes nos papéis de remetente, destinatário e pagador; coletas com encomendas; depósitos por cidade; agrupamento por região; notas fiscais com frete; faturas com várias notas; e caminhões que atendem cidades. Os dois requisitos adicionais ampliam o modelo sem alterar o núcleo: o RA1 introduz a hierarquia de tipos de encomenda e o RA2 introduz o embarque com ocorrências, que dá origem à agregação.
+
+Para o NoSQL, a separação em oito coleções manteve as entidades independentes como referências e embutiu apenas os dados dependentes e limitados. Os snapshots garantem que notas e faturas preservem a informação histórica, e a desnormalização de cidade e região reduz consultas sem criar duplicação relevante. As escolhas priorizam a leitura do agregado e a simplicidade de manutenção, que são os padrões de acesso predominantes no problema.

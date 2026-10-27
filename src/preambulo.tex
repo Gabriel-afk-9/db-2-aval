@@ -1,0 +1,149 @@
+% ============================================================
+% Preambulo do trabalho - Grupo 6 / Transportadora
+% ============================================================
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{lmodern}
+\usepackage[top=2.7cm,bottom=2.4cm,left=2.5cm,right=2.2cm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{tabularx}
+\renewcommand{\tabularxcolumn}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{pdflscape}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes.geometric,arrows.meta,fit,backgrounds,calc,decorations.pathreplacing}
+\usepackage{listings}
+\usepackage{needspace}
+\usepackage{amsmath,amssymb}
+\usepackage{pifont}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[hidelinks,unicode]{hyperref}
+
+% ---------- Cores ----------
+\definecolor{azul}{HTML}{1F4E79}
+\definecolor{azulclaro}{HTML}{DEEAF6}
+\definecolor{verde}{HTML}{2E7D32}
+\definecolor{verdeclaro}{HTML}{E2EFDA}
+\definecolor{laranja}{HTML}{C55A11}
+\definecolor{laranjaclaro}{HTML}{FBE5D6}
+\definecolor{roxo}{HTML}{6A1B9A}
+\definecolor{roxoclaro}{HTML}{EDE7F6}
+\definecolor{cinza}{HTML}{595959}
+\definecolor{cinzaclaro}{HTML}{F2F2F2}
+
+% ---------- Hyperref ----------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=azul,
+  urlcolor=azul,
+  citecolor=azul,
+  pdftitle={Segunda Avaliacao Semestral - Grupo 6 - Sistema de Transportadora},
+  pdfauthor={Felipe Martins; Vitor Santos; Francisco Osmar; Gabriel Lima},
+  pdfsubject={Modelagem de Banco de Dados Relacional e NoSQL},
+  pdfkeywords={MER, DER, NoSQL, MongoDB, transportadora, banco de dados}
+}
+
+% ---------- Pagina ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{azul}UESPI -- T\'opicos em Banco de Dados}
+\fancyhead[R]{\footnotesize\color{azul}Grupo 6 -- Transportadora}
+\fancyfoot[C]{\footnotesize\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ---------- Titulos ----------
+\titleformat{\section}
+  {\Large\bfseries\color{azul}}{\thesection}{0.65em}{}
+  [\vspace{1pt}{\color{azul}\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\large\bfseries\color{azul!85!black}}{\thesubsection}{0.55em}{}
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{cinza}}{\thesubsubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{2.2ex plus 1ex minus .2ex}{1.2ex}
+\titlespacing*{\subsection}{0pt}{1.8ex plus .5ex minus .2ex}{0.8ex}
+
+% ---------- Listas e tabelas ----------
+\setlist[itemize]{leftmargin=1.4em,itemsep=2pt,topsep=2pt}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=2pt,topsep=2pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{4pt}
+% Permite quebra de linha em identificadores com sublinhado (tabelas estreitas)
+\renewcommand{\_}{\textunderscore\allowbreak}
+\captionsetup{font=small,labelfont={bf,color=azul},justification=centering}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{2pt}
+\onehalfspacing
+
+% ---------- Comandos ----------
+\newcommand{\pk}[1]{\underline{#1}}
+\newcommand{\fk}[1]{\textit{#1}}
+\newcommand{\cod}[1]{\texttt{#1}}
+\newcommand{\termo}[1]{\textbf{#1}}
+\newcommand{\grau}[1]{\textdegree}
+\newcommand{\ok}{\textcolor{verde}{\ding{51}}}
+\newcommand{\nao}{\textcolor{red}{\ding{55}}}
+
+% ---------- Listings (JSON / codigo) ----------
+\lstdefinestyle{json}{
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{cinza!45},
+  backgroundcolor=\color{cinzaclaro},
+  numbers=left,
+  numberstyle=\tiny\color{cinza},
+  numbersep=5pt,
+  xleftmargin=1.6em,
+  framexleftmargin=1.4em,
+  tabsize=2,
+  captionpos=b,
+  upquote=true
+}
+\lstset{style=json}
+
+% ---------- TikZ ----------
+\tikzset{
+  ent/.style={draw=azul, thick, rounded corners=2pt, fill=azulclaro,
+    minimum width=2.55cm, minimum height=1.0cm, align=center,
+    font=\small\bfseries, inner sep=3pt},
+  entdet/.style={draw=azul, thick, rounded corners=2pt, fill=azulclaro,
+    text width=4.15cm, align=left, font=\scriptsize, inner sep=3pt},
+  entref/.style={draw=verde!70!black, thick, rounded corners=2pt, fill=verdeclaro,
+    minimum width=2.45cm, minimum height=0.95cm, align=center,
+    font=\small\bfseries, inner sep=3pt},
+  entadd/.style={draw=laranja, thick, rounded corners=2pt, fill=laranjaclaro,
+    minimum width=2.55cm, minimum height=1.0cm, align=center,
+    font=\small\bfseries, inner sep=3pt},
+  entsub/.style={draw=roxo, thick, rounded corners=2pt, fill=roxoclaro,
+    text width=3.55cm, align=left, font=\scriptsize, inner sep=3pt},
+  rel/.style={draw=cinza, thick, diamond, aspect=1.9, fill=cinzaclaro,
+    inner sep=1pt, font=\scriptsize\bfseries, align=center},
+  reladd/.style={draw=laranja, thick, diamond, aspect=1.9, fill=laranjaclaro,
+    inner sep=1pt, font=\scriptsize\bfseries, align=center},
+  card/.style={font=\scriptsize, fill=white, inner sep=1pt},
+  rotulo/.style={font=\scriptsize\itshape, fill=white, inner sep=1pt, align=center},
+  linha/.style={draw=cinza, thick},
+  linhatotal/.style={draw=cinza, thick, double, double distance=1.3pt},
+  seta/.style={-{Latex[length=2mm]}, draw=cinza, thick},
+  agregacao/.style={draw=laranja, thick, dashed, rounded corners=4pt, inner sep=6pt}
+}
