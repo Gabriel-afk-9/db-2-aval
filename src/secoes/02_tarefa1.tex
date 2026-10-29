@@ -122,9 +122,9 @@ A Tabela~\ref{tab:relacionamentos} resume os relacionamentos, as cardinalidades 
 
 \texttt{AGRUPIA} & Cidade--Regiao & N:1 & Total em Cidade: cada cidade pertence a uma região; uma região agrupa várias cidades.\\
 
-\texttt{ATENDE} & Caminhao--Cidade & N:N & Parcial nos dois lados: um caminhão atende várias cidades; uma cidade é atendida por vários caminhões.\\
+\texttt{ATENDE} & Caminhao--Cidade & N:N & Total em Caminhao, parcial em Cidade: um caminhão atende uma ou mais cidades (P6); uma cidade pode não ter caminhões cadastrados.\\
 
-\texttt{EMBARCA} & NotaFiscal--Caminhao & N:N & Parcial nos dois lados: uma nota pode ter vários embarques; um caminhão pode realizar vários embarques.\\
+\texttt{EMBARCA} & NotaFiscal--Caminhao & N:N & Total em NotaFiscal, parcial em Caminhao: uma nota tem um ou mais embarques (P7); um caminhão pode não ter embarques.\\
 
 \texttt{DESTINO\_TRECHO} & Embarque--Cidade & N:1 & Total em Embarque: cada trecho tem uma cidade de destino.\\
 

@@ -170,7 +170,7 @@ A Tabela~\ref{tab:indices} lista os índices que sustentam as consultas mais fre
 
 \texttt{coletas} & \texttt{\{"destinatario.cpf": 1\}} & Histórico de coletas por destinatário.\\
 \texttt{coletas} & \texttt{\{"cidade\_destino.codigo": 1\}} & Coletas por cidade de destino.\\
-\texttt{notas\_fiscais} & \texttt{\{encomenda\_id: 1\}}, único & Garantir a cardinalidade 1:1 com a encomenda.\\
+\texttt{notas\_fiscais} & \texttt{\{encomenda\_id: 1\}}, único & Garantir 1:1 NotaFiscal--Encomenda (impede notas duplicadas para a mesma encomenda).\\
 \texttt{notas\_fiscais} & \texttt{\{fatura\_id: 1\}} & Recuperar as notas de uma fatura.\\
 \texttt{notas\_fiscais} & \texttt{\{"transportes.\allowbreak caminhao\_id": 1\}} & Histórico de notas por caminhão (multikey).\\
 \texttt{notas\_fiscais} & \texttt{\{"transportes.\allowbreak ocorrencias.\allowbreak tipo": 1\}} & Consultar ocorrências por tipo (multikey).\\
@@ -178,6 +178,19 @@ A Tabela~\ref{tab:indices} lista os índices que sustentam as consultas mais fre
 \texttt{caminhoes} & \texttt{\{"cidades\_atendidas.\allowbreak codigo": 1\}} & Caminhões que atendem uma cidade (multikey).\\
 \end{longtable}
 }
+
+\subsection{Garantias de integridade no MongoDB}
+
+O modelo relacional usa chaves estrangeiras e restrições declarativas para assegurar integridade referencial. No MongoDB, essas garantias precisam ser tratadas de forma diferente:
+
+\begin{itemize}
+  \item \textbf{Índice único em \texttt{notas\_fiscais.encomenda\_id}} impede que duas notas fiscais referenciem a mesma encomenda (garante o lado ``1'' do 1:1). Para assegurar que \emph{toda} encomenda tenha uma nota fiscal, a aplicação deve criar a nota no mesmo fluxo da encomenda (transação ou lógica atômica na escrita).
+  \item \textbf{Consistência NotaFiscal--Fatura}: a nota armazena \texttt{fatura\_id} (referência) e a fatura mantém um array-resumo \texttt{notas[]} (desnormalização controlada). A sincronização é responsabilidade da aplicação: ao criar uma nota, a fatura é atualizada na mesma operação (transação MongoDB multi-documento). Ao cancelar uma nota, a fatura deve ser ajustada.
+  \item \textbf{Integridade de Embarque--Ocorrência}: ao embutir \texttt{ocorrencias[]} dentro de \texttt{transportes[]}, a integridade é estrutural --- não existe ocorrência sem embarque pai.
+  \item \textbf{Cardinalidade ATENDE (Caminhao 1:N)}: o array \texttt{cidades\_atendidas[]} não impede um caminhão sem cidades. A validação de mínimo 1 (premissa P6) deve ser feita na aplicação antes de persistir.
+  \item \textbf{Transações multi-documento}: operações que afetam \texttt{notas\_fiscais} e \texttt{faturas} simultaneamente (criar nota + atualizar fatura, cancelar nota + ajustar fatura) devem usar \texttt{session.startTransaction()} do MongoDB para atomicidade.
+  \item \textbf{JSON Schema}: validações de estrutura (campos obrigatórios, tipos, enum para \texttt{tipo\_encomenda}, \texttt{tipo\_ocorrencia}) são definidas via comando \texttt{db.createCollection} com validador \texttt{\{\$jsonSchema:...\}}.
+\end{itemize}
 
 \subsection{Comentários sobre as escolhas}
 

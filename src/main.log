@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.9.25)  27 OCT 2026 13:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.9.25)  29 OCT 2026 11:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1199,36 +1199,36 @@ Package hyperref Info: Link coloring ON on input line 4.
 Package babel Info: Main language set to 'brazil'.
  (secoes/00_capa.tex
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 2
-9.
+3.
 
 (C:\Users\BLACK TIE\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 2
-9.
+3.
 
 (C:\Users\BLACK TIE\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-29.
+23.
 
 (C:\Users\BLACK TIE\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-29.
+23.
 
 (C:\Users\BLACK TIE\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 29.
+(Font)              <12> on input line 23.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 29.
+(Font)              <8> on input line 23.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 29.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 29.
+(Font)              <6> on input line 23.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 23.
 
 
 (C:\Users\BLACK TIE\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
@@ -1238,7 +1238,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 g
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 29.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 23.
 
  (C:\Users\BLACK TIE\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -1278,7 +1278,7 @@ l.30
 Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Users/BLACK TIE/AppData/Local/
 Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}] (diagramas/der_geral.tex
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 111.
+(Font)              <5> on input line 114.
 )
 [5] (diagramas/hierarquia.tex) (diagramas/agregacao.tex) [6]
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -1288,8 +1288,11 @@ mathsy.enc}])
 (secoes/03_tarefa2.tex [9] [10] [11]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
 nput line 113.
- [12]) (secoes/04_consideracoes.tex
-[13]) (secoes/05_referencias.tex) [14]
+ [12] [13]
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 187.
+) (secoes/04_consideracoes.tex
+[14]) (secoes/05_referencias.tex) [15]
 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (main.aux)
@@ -1298,16 +1301,16 @@ LaTeX2e <2026-06-01>
 L3 programming layer <2026-08-10>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: B524FD7ACAB406F70B7C92D0E1BCE381;3239.
+(rerunfilecheck)             Checksum: 0232D47406134D472AE5E793E9D3426A;3484.
  ) 
 Here is how much of TeX's memory you used:
- 31808 strings out of 467440
- 604289 string characters out of 5405590
- 1227139 words of memory out of 5000000
- 60264 multiletter control sequences out of 15000+600000
- 712979 words of font info for 181 fonts, out of 8000000 for 9000
+ 31798 strings out of 467440
+ 603904 string characters out of 5405590
+ 1226096 words of memory out of 5000000
+ 60249 multiletter control sequences out of 15000+600000
+ 713394 words of font info for 183 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 97i,12n,98p,1003b,1221s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 97i,11n,98p,1003b,1221s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/BLACK TIE/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx1
 0.pfb><C:/Users/BLACK TIE/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/l
 mbx12.pfb><C:/Users/BLACK TIE/AppData/Local/Programs/MiKTeX/fonts/type1/public/
@@ -1321,12 +1324,13 @@ onts/type1/public/lm/lmr8.pfb><C:/Users/BLACK TIE/AppData/Local/Programs/MiKTeX
 /fonts/type1/public/lm/lmri12.pfb><C:/Users/BLACK TIE/AppData/Local/Programs/Mi
 KTeX/fonts/type1/public/lm/lmri8.pfb><C:/Users/BLACK TIE/AppData/Local/Programs
 /MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Users/BLACK TIE/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/BLACK TIE/AppData/Local/
-Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb><C:/Users/BLACK TIE/AppData/Lo
-cal/Programs/MiKTeX/fonts/type1/public/lm/lmtt8.pfb>
-Output written on main.pdf (15 pages, 436606 bytes).
+rams/MiKTeX/fonts/type1/public/lm/lmtk10.pfb><C:/Users/BLACK TIE/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/BLACK TIE/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb><C:/Users/BLACK TIE/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt8.pfb>
+Output written on main.pdf (16 pages, 465078 bytes).
 PDF statistics:
- 335 PDF objects out of 1000 (max. 8388607)
- 92 named destinations out of 1000 (max. 500000)
- 49317 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 348 PDF objects out of 1000 (max. 8388607)
+ 94 named destinations out of 1000 (max. 500000)
+ 49837 words of extra memory for PDF output out of 51595 (max. 10000000)
 

@@ -33,6 +33,8 @@
     font=\small\bfseries, inner sep=3pt},
   rel/.style={draw=cinza, thick, diamond, aspect=1.9, fill=cinzaclaro,
     inner sep=1pt, font=\scriptsize\bfseries, align=center},
+  reladd/.style={draw=laranja, thick, diamond, aspect=1.9, fill=laranjaclaro,
+    inner sep=1pt, font=\scriptsize\bfseries, align=center},
   card/.style={font=\scriptsize, fill=white, inner sep=1pt},
   rotulo/.style={font=\scriptsize\itshape, fill=white, inner sep=1pt, align=center},
   linha/.style={draw=cinza, thick},
@@ -67,7 +69,7 @@
   \node[rel] (sedia) at (-6.2,1.0) {SEDIA};
   \node[rel] (agrupia) at (1.0,1.0) {AGRUPIA};
   \node[rel] (atende) at (-6.2,-1.3) {ATENDE};
-  \node[rel] (embarca) at (-5.2,-3.6) {EMBARCA};
+  \node[reladd] (embarca) at (-2.8,-2.8) {EMBARCA};
   \node[rel] (destino) at (-0.4,-1.3) {DESTINO\\TRECHO};
   \node[rel] (registra) at (4.0,-3.6) {REGISTRA};
   \node[rel] (paga) at (-4.5,7.3) {PAGA};
@@ -99,7 +101,9 @@
   \draw[linha] (caminhao.north) -- (atende.south);
   \draw[linha] (atende.north) -- (cidade.south west);
 
-  \draw[linha] (caminhao.east) -- (embarca.west);
+  % EMBARCA como agregação entre NotaFiscal e Caminhao
+  \draw[linha] (nota.south west) -- (embarca.north east);
+  \draw[linha] (caminhao.north east) -- (embarca.south west);
   \draw[linha] (embarca.east) -- (embarque.west);
 
   \draw[linha] (embarque.north) -- (destino.south);
@@ -133,8 +137,9 @@
   \node[card, below] at (agrupia.east) {(1,1)};
   \node[card, left] at (atende.south) {(1,N)};
   \node[card, right] at (atende.north) {(0,N)};
-  \node[card, above] at (-6.5,-3.15) {(0,N)};
-  \node[card, above] at (-3.9,-3.15) {(0,N)};
+  % EMBARCA cardinalidades
+  \node[card, above left] at (embarca.north west) {(1,N)};
+  \node[card, below right] at (embarca.south east) {(0,N)};
   \node[card, left] at (destino.south) {(1,1)};
   \node[card, right] at (destino.north) {(0,N)};
   \node[card, above] at (3.3,-3.15) {(0,N)};
@@ -144,7 +149,7 @@
 
   % ---------- Papéis e anotações ----------
   \node[rotulo, anchor=west] at (fatura.east) {pagador};
-  \node[agregacao, fit=(embarque), inner sep=0.18cm] {};
+  \node[agregacao, fit=(embarca), inner sep=0.18cm] {};
 
   % ---------- Legenda ----------
   \node[draw=cinza, rounded corners=2pt, fill=white, text width=7.2cm,
